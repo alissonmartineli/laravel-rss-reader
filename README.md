@@ -15,3 +15,9 @@ composer install
 # sobe os containers da aplicação
 ./vendor/bin/sail up -d
 ```
+
+A api ficará disponível na porta 80
+
+```
+http://localhost
+```
