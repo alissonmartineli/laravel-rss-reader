@@ -4,8 +4,14 @@ Realiza a leitura do RSS https://g1.globo.com/rss/g1/economia/ e disponibiliza a
 
 Utiliza cache Redis para melhorar o desempenho e disponibilidade. O cache esta configurado com duração de 60s.
 
-O projeto esta configurado com Laravel Sail. Para iniciar basta executar:
+O projeto esta configurado com Laravel Sail.
+
+Para iniciar:
 
 ```
-./vendor/bin/sail up
+# instala as dependências do PHP
+composer install
+
+# sobe os containers da aplicação
+./vendor/bin/sail up -d
 ```
