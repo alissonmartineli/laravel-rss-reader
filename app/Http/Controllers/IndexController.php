@@ -2,27 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Infra\FeedReader;
+use App\Infra\News\CacheRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
 
 class IndexController extends Controller
 {
+    private CacheRepository $repository;
+
+    public function __construct(CacheRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * RSS Reader.
      */
     public function __invoke(): JsonResponse
     {
-        $data = Cache::remember('feed', 60, function () {
-            $url = 'https://g1.globo.com/rss/g1/economia/';
-
-            return FeedReader::read($url)
-                ->sortByDesc('pubDate')
-                ->values()
-                ->all()
-            ;
-        });
-
-        return response()->json($data);
+        return response()->json(
+            array_map(
+                fn ($news) => [
+                    'title' => $news->getTitle(),
+                    'pubDate' => (string) $news->getPubDate(),
+                    'link' => (string) $news->getLink(),
+                ],
+                $this->repository->getAllSortedByPubDate()
+            )
+        );
     }
 }
